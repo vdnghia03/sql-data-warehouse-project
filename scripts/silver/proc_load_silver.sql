@@ -44,7 +44,16 @@ FROM (
 WHERE T.flag_last = 1  -- Select the most recent record for customer
 
 
-
+INSERT INTO silver.crm_prd_info (
+	prd_id
+	, cat_id
+	, prd_key
+	, prd_nm
+	, prd_cost
+	, prd_line
+	, prd_start_dt
+	, prd_end_dt
+)
 SELECT
 	prd_id
 	, REPLACE(SUBSTRING(TRIM(prd_key), 1, 5), '-', '_') AS cat_id
@@ -66,3 +75,27 @@ FROM bronze.crm_prd_info
 
 -- WHERE REPLACE(SUBSTRING(TRIM(prd_key), 1, 5), '-', '_') NOT IN
 -- 	(SELECT DISTINCT id FROM bronze.erp_px_cat_g1v2)
+
+
+SELECT
+	sls_ord_num
+	, sls_prd_key
+	, sls_cust_id
+	, CASE 
+		WHEN sls_order_dt = 0 OR LEN(sls_order_dt) != 8 THEN NULL
+		ELSE CAST( CAST(sls_order_dt AS VARCHAR) AS DATE ) 
+	END AS sls_order_dt
+
+	, CASE 
+		WHEN sls_ship_dt = 0 OR LEN(sls_ship_dt) != 8 THEN NULL
+		ELSE CAST( CAST(sls_ship_dt AS VARCHAR) AS DATE ) 
+	END AS sls_ship_dt
+
+	, CASE 
+		WHEN sls_due_dt = 0 OR LEN(sls_due_dt) != 8 THEN NULL
+		ELSE CAST( CAST(sls_due_dt AS VARCHAR) AS DATE ) 
+	END AS sls_due_dt
+	, sls_sales
+	, sls_quantity
+	, sls_price
+FROM bronze.crm_sales_details
