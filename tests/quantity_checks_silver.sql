@@ -137,3 +137,19 @@ WHERE
 	OR sls_quantity <= 0 OR sls_quantity IS NULL
 	OR sls_price <= 0 OR sls_price IS NULL
 ORDER BY sls_sales, sls_quantity, sls_price
+
+-- ============================================
+--   CHECK TABLE silver.erp_cust_az12
+-- ============================================
+
+-- Check Invalid Date
+SELECT DISTINCT
+	bdate
+FROM silver.erp_cust_az12
+WHERE bdate < '1924-01-01' OR bdate > GETDATE()
+
+-- Check consistency
+
+SELECT DISTINCT
+	gen
+FROM silver.erp_cust_az12
