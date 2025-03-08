@@ -153,3 +153,34 @@ SELECT
 	*
 FROM bronze.crm_sales_details
 WHERE sls_order_dt > sls_ship_dt OR sls_order_dt > sls_due_dt
+
+-----------------------------
+-- bronze.erp_cust_az12
+-----------------------------
+
+-- Check Forein key
+SELECT 
+	CASE
+		WHEN cid LIKE 'NAS%' THEN SUBSTRING(cid, 4, LEN(cid))
+		ELSE cid
+	END AS cid
+	, bdate
+	, gen
+FROM bronze.erp_cust_az12
+WHERE CASE WHEN cid LIKE 'NAS%' THEN SUBSTRING(cid, 4, LEN(cid)) ELSE cid END
+NOT IN (
+	SELECT DISTINCT cst_key FROM bronze.crm_cust_info
+)
+
+-- Check Invalid Date
+SELECT DISTINCT
+	bdate
+FROM bronze.erp_cust_az12
+WHERE bdate < '1924-01-01' OR bdate > GETDATE()
+
+-- Check consistency
+
+SELECT DISTINCT
+	gen
+FROM bronze.erp_cust_az12
+
