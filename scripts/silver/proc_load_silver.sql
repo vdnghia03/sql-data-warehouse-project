@@ -115,3 +115,26 @@ SELECT
 			ELSE sls_price
 	END AS sls_price -- Derive price if original value is invalid
 FROM bronze.crm_sales_details
+
+--===================================
+--==================================
+INSERT INTO silver.erp_cust_az12(
+	cid
+	, bdate
+	, gen
+)
+SELECT 
+	CASE
+		WHEN cid LIKE 'NAS%' THEN SUBSTRING(cid, 4, LEN(cid)) -- Remove NAS prefix if exsist
+		ELSE cid
+	END AS cid
+	, CASE
+		WHEN bdate > GETDATE() THEN NULL -- Set birthday future is NULL
+		ELSE bdate
+	END AS bdate
+	, CASE 
+		WHEN UPPER(TRIM(gen)) IN ('M', 'MALE') THEN 'Male'
+		WHEN UPPER(TRIM(gen)) IN ('F', 'FEMALE') THEN 'Female'
+		ELSE 'n/a'
+	END AS gen -- Normalize gender value and handle unknown case
+FROM bronze.erp_cust_az12
