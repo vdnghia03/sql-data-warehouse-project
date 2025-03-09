@@ -153,3 +153,22 @@ WHERE bdate < '1924-01-01' OR bdate > GETDATE()
 SELECT DISTINCT
 	gen
 FROM silver.erp_cust_az12
+-- ============================================
+--   CHECK TABLE silver.erp_loc_a101
+-- ============================================
+
+-- Check Forein Key
+-- Expectation: No Result
+SELECT DISTINCT
+	REPLACE(TRIM(cid), '-','') AS cid
+	, cntry
+FROM bronze.erp_loc_a101
+-- WHERE REPLACE(TRIM(cid), '-','') NOT IN
+-- (SELECT cst_key
+-- FROM silver.crm_cust_info)
+
+-- Check consistency & normalization
+SELECT DISTINCT
+	cntry
+FROM silver.erp_loc_a101
+
