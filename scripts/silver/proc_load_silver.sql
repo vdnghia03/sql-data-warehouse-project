@@ -1,10 +1,19 @@
 /*
 =================================================================
-CREATE SILVER LAYER WITH TRANSFORMATION
+Store Procedure: Load Silver Layer (Bronze -> Silver)
 =================================================================
 Script Purpose:
-  - Solution of issue data quality in many Tables
-  -................
+  - This store procedure performs the ETL (Extract, Transform and Load) process
+to populate the 'silver' schema table from the 'bronze' layer.
+  Action perform:
+  - Truncate the silver tables.
+  - Insert transform and Cleaned data from Bronze into silver table
+
+Parametter:
+  None
+
+Usage Example:
+	EXEC silver.load_silver
 */
 
 use DataWarehouse;
