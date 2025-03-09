@@ -172,3 +172,33 @@ SELECT DISTINCT
 	cntry
 FROM silver.erp_loc_a101
 
+-- ============================================
+--   CHECK TABLE silver.erp_px_cat_g1v2
+-- ============================================
+SELECT *
+FROM bronze.erp_px_cat_g1v2
+
+-- Check Foreign Key
+SELECT
+	id
+FROM bronze.erp_px_cat_g1v2
+WHERE id NOT IN
+(
+	SELECT cat_id FROM silver.crm_prd_info
+)
+
+-- Check Unwanted Space
+SELECT
+	id
+	, cat
+	, subcat
+	, maintenance
+FROM bronze.erp_px_cat_g1v2
+WHERE cat != TRIM(cat) OR  maintenance != TRIM(maintenance) OR subcat != TRIM(subcat)
+
+-- Check Consistency
+
+SELECT DISTINCT
+	maintenance
+FROM bronze.erp_px_cat_g1v2
+
