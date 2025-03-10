@@ -1,7 +1,19 @@
 /*
-=====================================
+============================================================================
 	Quality Check Silver
-=====================================
+============================================================================
+Script Purpose:
+   This script performs various quantity checks for data consistency, accuracy
+and standardization across the 'silver' schema. It includes check for:
+	- Null or duplicate primary key
+	- Unwanted space in string fields
+	- Data standardization and consistency
+	- Invalid the ranges and orders.
+	- Data consistency between related fields.
+Usage Notes:
+	- Run re-check after data loading Silver Layer.
+	- Investigate and resolve any discrepancies found during the checks.
+==============================================================================
 */
 
 use DataWarehouse;
