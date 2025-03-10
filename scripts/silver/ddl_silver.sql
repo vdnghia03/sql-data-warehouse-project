@@ -5,6 +5,7 @@
 Create DDL Silver Layer
 =====================================
 Script Purpose:
+   This script create table in the 'silver' schema, dropping existing table if they already exist.
 	This perform the following action
 	- Drop table if exist
 	- Create table with columns
