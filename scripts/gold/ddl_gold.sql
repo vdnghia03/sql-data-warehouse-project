@@ -3,15 +3,21 @@
 Create DDL gold - Dimension and Fact
 ===================================================================
 Script Purpose:
+	This scripts creates view for Gold Layer in Data Warehouse
+	The Gold Layer represents the final dimension and Fact Table (Star Schema)
 
+	Each View perform transformations and combines data from the Silver Layer
+	to produce a clean, enriched, and business-ready dataset.
 
-
-
+Usage:
+    - These views can be queried directly for analytics and reporting.
 ===================================================================
-
 */
 
 
+-- ===========================================================================
+-- Create Dimension : gold.dim_customers
+-- ===========================================================================
 CREATE VIEW gold.dim_customers AS
 SELECT
 	ROW_NUMBER() OVER (ORDER BY ci.cst_id) AS customer_key -- Suggorate Key
@@ -33,8 +39,10 @@ ON		ci.cst_key = ca.cid
 LEFT JOIN silver.erp_loc_a101 AS la
 ON      ci.cst_key = la.cid
 
---===================================
---==================================
+
+-- =============================================================================
+-- Create Dimension: gold.dim_products
+-- =============================================================================
 CREATE VIEW gold.dim_products AS 
 SELECT
 	ROW_NUMBER() OVER (ORDER BY pn.prd_start_dt, pn.prd_key) AS product_key
@@ -53,9 +61,10 @@ LEFT JOIN silver.erp_px_cat_g1v2 AS pc
 ON pn.cat_id = pc.id
 WHERE prd_end_dt IS NULL -- Filter Out all historical Data
 
-
---========================================
---=======================================
+	
+-- =============================================================================
+-- Create Fact Table: gold.fact_sales
+-- =============================================================================
 CREATE VIEW gold.fact_sales AS
 SELECT
 	sd.sls_ord_num AS order_number
